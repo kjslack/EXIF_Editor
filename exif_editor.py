@@ -27,7 +27,6 @@ def DisplayImage(image):
     image_label = Tkinter.Label(image=render)
     image_label.image = render
     image_label.place(x=0, y=0)
-    window.mainloop()  # needed to get the window to work when run from PyCharm
     return window
 
 
@@ -50,7 +49,8 @@ def FilesInDirectory(directory_path):
         if os.path.isfile(directory_path + '/' + directory_item):
             filename, extension = os.path.splitext(directory_item)
             # Only add image type files (.jpg & .png)
-            if extension == '.jpg' or extension == '.png':
+            # if the file extension is uppercase, temporarily make it lowercase for the comparison
+            if extension.lower() == '.jpg' or extension.lower() == '.png':
                 fileList.append(directory_path + '/' +directory_item)
     return fileList
 
@@ -71,6 +71,7 @@ if( __name__ == "__main__"):
 
     for image_file in list_of_files:
         filename = image_file
+        #filename = "Test_Image.jpg"
 
         image = Image.open(filename)
 
@@ -79,6 +80,7 @@ if( __name__ == "__main__"):
 
         image_for_display = ScaleImage(image_for_display, 600)
         window = DisplayImage(image_for_display)
+        #window.mainloop()  # needed to get the window to work when run from PyCharm
 
         exif_dict = piexif.load(image.info["exif"])
 
@@ -88,7 +90,7 @@ if( __name__ == "__main__"):
         # Set User Comment Exif Tag 37510
         exif_dict['Exif'][37510] = description
 
-        SetTags(exif_dict)
+        #SetTags(exif_dict)
 
         # Converts the revised exif data which is text to a binaryish format for writing back to the image.
         exif_bytes = piexif.dump(exif_dict)
